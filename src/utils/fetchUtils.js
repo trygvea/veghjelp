@@ -1,17 +1,7 @@
-import 'whatwg-fetch'
-import {parseString} from 'xml2js'
 
-
-const getDefaultHeaders = () =>
-    // new Headers  // this is what the spec says, but it works without and is easer to test
-    ({
-        "X-Requested-With": "XMLHttpRequest"   // Need this to get authorisation failure as redirects to authAjax
-    })
-
-
-const jsonHeaders = () => ({
-        'Content-Type': 'application/json'
-    })
+const jsonHeaders = ({
+    'Content-Type': 'application/json'
+})
 
 
 const handleFetchErrors = response => {
@@ -28,25 +18,8 @@ const handleFetchErrors = response => {
 }
 
 
-export const fetchXml= (url, config = {}) =>
-    fetch(url, {...config})
-        .then(handleFetchErrors)
-        .then(response => response.text())
-        .then(xml => parseString(xml, (err, result) => {
-            if (err) {
-                Promise.reject(err);
-            } else {
-                Promise.resolve(result);
-            }
-        }))
-
-
 export const fetchJson = (url, config = {}) =>
-    fetch(url, {
-        ...config,
-        credentials: 'same-origin',
-        headers: getDefaultHeaders()
-    })
+    fetch(url, {...config})
         .then(handleFetchErrors)
         .then(response => response.json())
 
@@ -60,9 +33,9 @@ export const postJson = (url, body, config = {}) =>
     })
 
 
-export const fetchXmlAction = (url, actionType) => dispatch =>
-    fetchXml(url)
+export const fetchAction = (url, actionType) => dispatch =>
+    fetchJson(url)
         .then(
-            xml => dispatch({type: actionType.SUCCESS}),
+            body => dispatch({type: actionType.SUCCESS, body}),
             err => dispatch({type: actionType.FAILURE})
         )

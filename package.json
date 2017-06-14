@@ -1,19 +1,18 @@
 {
-  "name": "veghjelp",
+  "name": "veghjelp2",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
-    "react-redux": "^5.0.4",
+    "react": "^15.6.0",
+    "react-dom": "^15.6.0",
+    "react-redux": "^5.0.5",
     "redux": "^3.6.0",
+    "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.2.0",
-    "reselect": "^3.0.0",
-    "whatwg-fetch": "^2.0.3"
+    "reselect": "^3.0.1"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5",
-    "redux-devtools": "^3.4.0"
+    "react-scripts": "1.0.7"
   },
   "scripts": {
     "start": "react-scripts start",

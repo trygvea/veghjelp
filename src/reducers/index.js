@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux'
 
-import currentLocation from './currentLocation'
+import geoLocation from './geoLocation'
+import mapLocation from './mapLocation'
 
 export default combineReducers({
-    currentLocation,
+    geoLocation,
+    mapLocation,
 })

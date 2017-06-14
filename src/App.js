@@ -1,18 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {connect} from 'react-redux'
 import GoogleMap from './components/GoogleMap'
 import './App.css';
 
-class App extends Component {
+class App extends React.PureComponent {
     render() {
+        const {lat, lng, zoom} = this.props.mapLocation
         return (
             <div className="App">
                 <div className="App-header">
                     <h2>Beste vei</h2>
                 </div>
-                <GoogleMap lat="59.0" lng="10.0" zoom="10.0"/>
+                <GoogleMap lat={lat} lng={lng} zoom={zoom}/>
             </div>
         )
     }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => ({
+    mapLocation: state.mapLocation,
+})
+
+export default connect(
+    mapStateToProps,
+)(App)

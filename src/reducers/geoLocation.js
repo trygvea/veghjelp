@@ -21,9 +21,10 @@ export default function(state = initialState, action = {}) {
             }
 
         case types.FETCH_GEOLOCATION_SUCCESS:
+            const {latitude, longitude} = action.geopos.coords
             return { ...state,
                 geoLocStatus: { status: 'success', error: null},
-                lastPosition: action.pos
+                lastPosition: {lat: latitude, lng: longitude}
             }
 
         default:

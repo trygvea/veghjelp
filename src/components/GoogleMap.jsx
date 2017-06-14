@@ -6,10 +6,12 @@ import './GoogleMap.css'
 /**
  * React mapping of google maps taken from http://revelry.co/google-maps-react-component-in-es6/
  */
-export default class extends React.Component {
+export default class extends React.PureComponent {
     state = { zoom: 10 };
 
     render() {
+        const {lat, lng, zoom} = this.props
+        this.map && this.map.setCenter({lat, lng})
         return (
             <div className="GMap">
                 <div className='GMap-canvas' ref="mapCanvas">
@@ -31,7 +33,7 @@ export default class extends React.Component {
 
     createMap() {
         return new google.maps.Map(this.refs.mapCanvas, {
-            zoom: this.state.zoom,
+            zoom: this.props.zoom,
             center: new google.maps.LatLng(this.props.lat, this.props.lng),
             // mapTypeId: 'terrain'
         })

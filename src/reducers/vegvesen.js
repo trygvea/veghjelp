@@ -1,13 +1,13 @@
 import * as types from '../actions';
 
-const initialState = {objekter: []}
+const initialState = {vegdekke: []}
 
 export default function(state = initialState, action = {}) {
     switch (action.type) {
 
         case types.LOAD_NEARBY_VEGDEKKE.SUCCESS:
             return { ...state,
-                objekter: action.body.objekter
+                vegdekke: action.body.objekter
             }
 
         default:

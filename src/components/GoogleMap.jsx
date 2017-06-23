@@ -1,17 +1,27 @@
 /*global google*/
 import React from 'react'
-
+import {connect} from 'react-redux'
+import {getVegdekkeFeatures} from '../selector/vegvesen'
 import './GoogleMap.css'
 
 /**
  * React mapping of google maps taken from http://revelry.co/google-maps-react-component-in-es6/
  */
-export default class extends React.PureComponent {
+class GoogleMap extends React.PureComponent {
     state = { zoom: 10 };
 
     render() {
-        const {lat, lng, zoom} = this.props
+        const {lat, lng, zoom, vegdekkeFeatures} = this.props
+        console.log('### vegdekke:', vegdekkeFeatures)
         this.map && this.map.setCenter({lat, lng})
+
+        if (vegdekkeFeatures.length > 0) {
+            this.map.data.addGeoJson({
+                type: "FeatureCollection",
+                features: vegdekkeFeatures
+            })
+        }
+
         return (
             <div className="GMap">
                 <div className='GMap-canvas' ref="mapCanvas">
@@ -40,6 +50,7 @@ export default class extends React.PureComponent {
     }
 
     createRoad() {
+
         const flightPlanCoordinates = [
             {lat: 59.0, lng: 10.0},
             {lat: 59.1, lng: 9.95},
@@ -64,3 +75,11 @@ export default class extends React.PureComponent {
     }
 
 }
+
+const mapStateToProps = (state, ownProps) => ({
+    vegdekkeFeatures: getVegdekkeFeatures(state),
+})
+
+export default connect(
+    mapStateToProps,
+)(GoogleMap)

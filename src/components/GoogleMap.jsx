@@ -32,8 +32,7 @@ class GoogleMap extends React.PureComponent {
 
     componentDidMount() {
         this.map = this.createMap()
-        this.createRoad()
-        google.maps.event.addListener(this.map, 'zoom_changed', ()=> this.handleZoomChange())
+        // google.maps.event.addListener(this.map, 'zoom_changed', ()=> this.handleZoomChange())
     }
 
     // clean up event listeners when component unmounts
@@ -47,25 +46,6 @@ class GoogleMap extends React.PureComponent {
             center: new google.maps.LatLng(this.props.lat, this.props.lng),
             // mapTypeId: 'terrain'
         })
-    }
-
-    createRoad() {
-
-        const flightPlanCoordinates = [
-            {lat: 59.0, lng: 10.0},
-            {lat: 59.1, lng: 9.95},
-            {lat: 59.1, lng: 9.9},
-            {lat: 59.2, lng: 9.85}
-        ];
-        const flightPath = new google.maps.Polyline({
-            path: flightPlanCoordinates,
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-        });
-
-        return flightPath.setMap(this.map);
     }
 
     handleZoomChange() {

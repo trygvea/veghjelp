@@ -2,18 +2,16 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getVegdekkeFeatures} from '../selector/vegvesen'
+import {mapBoundsChanged} from '../actions/creators/map'
 import './GoogleMap.css'
 
 /**
  * React mapping of google maps taken from http://revelry.co/google-maps-react-component-in-es6/
  */
 class GoogleMap extends React.PureComponent {
-    state = { zoom: 10 };
-
     render() {
-        const {lat, lng, zoom, vegdekkeFeatures} = this.props
-        console.log('### vegdekke:', vegdekkeFeatures)
-        this.map && this.map.setCenter({lat, lng})
+        const {vegdekkeFeatures} = this.props
+        console.log('### render map, number of vegdekke features:', vegdekkeFeatures.length)
 
         if (vegdekkeFeatures.length > 0) {
             this.map.data.addGeoJson({
@@ -32,26 +30,24 @@ class GoogleMap extends React.PureComponent {
 
     componentDidMount() {
         this.map = this.createMap()
-        // google.maps.event.addListener(this.map, 'zoom_changed', ()=> this.handleZoomChange())
+        google.maps.event.addListener(this.map, 'idle', ()=> this.handleMapChanges())
     }
 
     // clean up event listeners when component unmounts
     componentDidUnMount() {
-        google.maps.event.clearListeners(this.map, 'zoom_changed')
+        google.maps.event.clearListeners(this.map, 'idle')
     }
 
     createMap() {
+        const {lat, lng, zoom} = this.props
         return new google.maps.Map(this.refs.mapCanvas, {
-            zoom: this.props.zoom,
-            center: new google.maps.LatLng(this.props.lat, this.props.lng),
-            // mapTypeId: 'terrain'
+            zoom,
+            center: new google.maps.LatLng(lat, lng),
         })
     }
 
-    handleZoomChange() {
-        this.setState({
-            zoom: this.map.getZoom()
-        })
+    handleMapChanges() {
+        this.props.mapBoundsChanged(this.map.getBounds())
     }
 
 }
@@ -62,4 +58,5 @@ const mapStateToProps = (state, ownProps) => ({
 
 export default connect(
     mapStateToProps,
+    {mapBoundsChanged}
 )(GoogleMap)

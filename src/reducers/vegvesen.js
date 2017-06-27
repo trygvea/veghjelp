@@ -1,6 +1,9 @@
 import * as types from '../actions';
 
-const initialState = {vegdekke: []}
+const initialState = {
+    vegdekke: [],
+    fartsgrenser: []
+}
 
 export default function(state = initialState, action = {}) {
     switch (action.type) {
@@ -8,6 +11,11 @@ export default function(state = initialState, action = {}) {
         case types.LOAD_NEARBY_VEGDEKKE.SUCCESS:
             return { ...state,
                 vegdekke: action.body.objekter
+            }
+
+        case types.LOAD_NEARBY_FARTSGRENSE.SUCCESS:
+            return { ...state,
+                fartsgrenser: action.body.objekter
             }
 
         default:

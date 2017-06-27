@@ -1,7 +1,7 @@
 /*global google*/
 import React from 'react'
 import {connect} from 'react-redux'
-import {getVegdekkeFeatures} from '../selector/vegvesen'
+import {getVegdekkeFeatures, getFartsgrenseFeatures} from '../selector/vegvesen'
 import {mapBoundsChanged} from '../actions/creators/map'
 import './GoogleMap.css'
 
@@ -9,7 +9,8 @@ import './GoogleMap.css'
  * React mapping of google maps taken from http://revelry.co/google-maps-react-component-in-es6/
  */
 class GoogleMap extends React.PureComponent {
-    render() {
+
+    renderVegdekke() {
         const {vegdekkeFeatures} = this.props
         console.log('### render map, number of vegdekke features:', vegdekkeFeatures.length)
 
@@ -19,6 +20,30 @@ class GoogleMap extends React.PureComponent {
                 features: vegdekkeFeatures
             })
         }
+    }
+
+    renderFartsgrense() {
+        const {fartsgrenseFeatures} = this.props
+        console.log('### render map, number of vegdekke features:', fartsgrenseFeatures.length)
+
+        if (fartsgrenseFeatures.length > 0) {
+            this.map.data.addGeoJson({
+                type: "FeatureCollection",
+                features: fartsgrenseFeatures
+            })
+            this.map.data.setStyle(feature => {
+                var color = feature.getProperty('color');
+                return {
+                    strokeColor: color,
+                    strokeWeight: 3
+                };
+            });
+        }
+    }
+
+    render() {
+        // this.renderVegdekke()
+        this.renderFartsgrense()
 
         return (
             <div className="GMap">
@@ -54,6 +79,7 @@ class GoogleMap extends React.PureComponent {
 
 const mapStateToProps = (state, ownProps) => ({
     vegdekkeFeatures: getVegdekkeFeatures(state),
+    fartsgrenseFeatures: getFartsgrenseFeatures(state),
 })
 
 export default connect(
